@@ -11,7 +11,6 @@ float graph(float y, float f, float t){
 #define r2d(t) mat2(cos(t),sin(t),-sin(t),cos(t))
 #define saturate(x) clamp(x, 0., 1.)
 
-#define cb(x) ((x)*(x)*(x))
 #define sq(x) ((x)*(x))
 
 void chmin(inout vec4 a, vec4 b){

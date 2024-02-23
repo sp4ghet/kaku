@@ -2,6 +2,7 @@
 out vec4 out_color;
 uniform vec4 resolution;
 #define logo_res vec4(1280, 1280, 1, 1)
+#define cb(x) ((x)*(x)*(x))
 
 #include "lib/util.glsl"
 
