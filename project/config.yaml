@@ -1,0 +1,3 @@
+midi_devices:
+  - LoopBe
+audio_device: VoiceMeeter

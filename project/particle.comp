@@ -1,0 +1,36 @@
+#version 440
+
+layout(local_size_x = 8, local_size_y = 8) in;
+layout(r32i) uniform iimage2D particle;
+layout(rgba32f) uniform image2D pcache;
+
+uniform vec4 resolution;
+uniform float beat;
+uniform float time;
+
+#include "lib/rng.glsl"
+
+// splat textures and accumulate them
+void main(){
+    ivec2 xy = ivec2(gl_GlobalInvocationID.xy);
+    vec2 uv = xy / vec2(8,8);
+    int id = xy.x + 8 * xy.y;
+
+    vec4 p = imageLoad(pcache, xy);
+    p.xz *= r2d(time * .2);
+    p.xy *= r2d(time * .1);
+    p.yz *= r2d(time * .3);
+
+    // p.y *= resolution.w;
+
+    int n = 200;
+    // float f = sin(time + sin(time * .03));
+    float f = -0.5;
+    for(int i=0; i<n; i++){
+        vec2 pt = sampleDisc(uv + vec2(i + fract(time), id)) * 0.05 * (.1 * sin(time) + abs(p.z-f));
+        pt += p.xy;
+        pt = pt2uv(pt);
+        ivec2 pixel_coord = ivec2(pt * vec2(1280,720));
+        imageAtomicAdd(particle, pixel_coord, 1);
+    }
+}

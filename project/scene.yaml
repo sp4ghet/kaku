@@ -1,0 +1,77 @@
+stages:
+  - vs: osci.vert
+    count: 20000
+    mode: LINES
+    thickness: 1
+    target: osci
+    float: true
+    mipmap: true
+    wrap: clamp
+  - vs: waveform.vert
+    count: 82192
+    mode: LINES
+    thickness: 7
+    target: waveform
+    float: true
+    mipmap: true
+    wrap: clamp
+  - cs: waterfall.comp
+    target: waterfall
+    float: true
+    resolution: [100, 100]
+    dispatch: [1,100]
+    filter: nearest
+    wrap_mode: clamp
+  - cs: pcache.comp
+    target: pcache
+    float: true
+    resolution: [64, 64]
+    dispatch: [8, 8]
+  - cs: particle.comp
+    target: particle
+    float: true
+    resolution: [1280,720]
+    dispatch: [8,8]
+    filter: nearest
+    wrap_mode: clamp
+  - cs: fetch.comp
+    target: gather
+    float: true
+    resolution: [1280, 720]
+    dispatch: [160, 90]
+  - fs: logo.frag
+    target: logo
+    resolution: [1280, 1280]
+  - fs: foreground.frag
+    target: foreground
+  - fs: test.frag
+    target: render
+    float: true
+    mipmap: true
+
+  - fs: post.frag
+    target: post
+    float: true
+  - fs: radial_blur.frag
+    target: post
+  - fs: backbuffer.frag
+    target: backbuffer
+  - fs: code.frag
+
+ndi:
+  - source: obs
+    name: code
+
+images:
+  - path: images/logo.png
+    name: nyolfen
+  - path: images/draw_logo.png
+    name: draw_logo
+
+audio:
+  audio_samples: 8192
+  spectrum:
+    filter: linear
+    mipmap: true
+  samples:
+    filter: linear

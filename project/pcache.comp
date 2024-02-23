@@ -1,0 +1,38 @@
+#version 440
+
+layout(local_size_x = 8, local_size_y = 8) in;
+layout(rgba32f) uniform image2D pcache;
+uniform vec4 pcache_res;
+uniform vec4 resolution;
+uniform float beat;
+uniform float time;
+uniform float time_delta;
+uniform vec4 buttons[32];
+uniform float sliders[32];
+uniform vec3 volume;
+
+uniform sampler1D samples;
+
+#include "lib/rng.glsl"
+
+void main(){
+    ivec2 xy = ivec2(gl_GlobalInvocationID.xy);
+    int id = xy.x + xy.y * int(pcache_res.x);
+    float x = float(id) / (pcache_res.x * pcache_res.y);
+    vec2 uv = vec2(xy) / pcache_res.xy;
+    float ti = floor(beat);
+    float nt = floor(beat) + 1;
+    float a = 0.5 + 0.5 * cos(TAU * exp(-5.0 * fract(beat)));
+    // a = fract(beat);
+    float t = mix(ti, nt, a);
+
+    vec3 p0 = random_sphere(uv);
+    vec3 q1 = cyclic_noise(p0 + 1.313 * ti, 4);
+    vec3 q2 = cyclic_noise(p0 + 1.313 * nt, 4);
+    vec3 p = mix(q1,q2,a);
+    // vec3 p = q1;
+
+
+    vec4 cp = vec4(p, 0);
+    imageStore(pcache, xy, cp);
+}
