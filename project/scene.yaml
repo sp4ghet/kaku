@@ -15,6 +15,15 @@ stages:
     float: true
     mipmap: true
     wrap: clamp
+  - vs: lissajous.vert
+    count: 20000
+    mode: LINES
+    thickness: 3
+    target: lissajous
+    float: true
+    mipmap: true
+    wrap: clamp
+
   - cs: waterfall.comp
     target: waterfall
     float: true
@@ -22,6 +31,7 @@ stages:
     dispatch: [1,100]
     filter: nearest
     wrap_mode: clamp
+
   - cs: pcache.comp
     target: pcache
     float: true
@@ -39,15 +49,38 @@ stages:
     float: true
     resolution: [1280, 720]
     dispatch: [160, 90]
+
   - fs: logo.frag
     target: logo
     resolution: [1280, 1280]
   - fs: foreground.frag
     target: foreground
+  - fs: tunnel.frag
+    target: tunnel
+
   - fs: test.frag
     target: render
     float: true
     mipmap: true
+
+  - fs: post/bloom.frag
+    target: render
+
+  - fs: post/sobel.frag
+    target: render
+
+  - fs: post/ascii.frag
+    target: render
+
+  - fs: post/chromab.frag
+    target: render
+
+  - fs: post/glitch.frag
+    target: render
+
+  - fs: post/jitter.frag
+    target: render
+
 
   - fs: post.frag
     target: post
@@ -67,6 +100,10 @@ images:
     name: nyolfen
   - path: images/draw_logo.png
     name: draw_logo
+  - path: images/dots.png
+    name: dots
+  - path: images/text3.png
+    name: font_atlas
 
 audio:
   audio_samples: 8192

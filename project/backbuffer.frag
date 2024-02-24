@@ -24,5 +24,11 @@ void main(){
     vec3 prev = texture(backbuffer, tuv).rgb;
     c = mix(c, prev, 0.8*buttons[7].x);
 
+    if(toggle(buttons[31])){
+      float t = fract(beat);
+      t = 0.5 + 0.5 * cos(PI + TAU * pow(t, 4));
+      c *= t;
+    }
+
     out_color = vec4(c, 1.);
 }

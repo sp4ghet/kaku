@@ -84,31 +84,15 @@ vec3 grain(vec3 c, vec2 uv, float pitch, float strength){
 void main(){
     vec2 uv = vec2(gl_FragCoord.xy) / resolution.xy;
 
-    float hitJitter = 1. - 0.5 - 0.5 * cos(PI*exp(-10 * saturate(buttons[5].z)));
-    hitJitter = max(buttons[5].x, hitJitter);
-    uv = jitterY(uv, hitJitter*sliders[4]*.05, 720.);
-
-    vec2 pt = uv2pt(uv);
     vec3 c = texture(render, uv).rgb;
-
-    if(toggle(buttons[28])){
-        vec3 lines = vec3(1) * sobel(uv, .5, render);
-        c = mix(c.rgb, lines, sliders[6]);
-    }
-
-    if(true){
-      float t = fract(beat);
-      t = 0.5 + 0.5 * cos(PI + TAU * pow(t, 4));
-      // c *= t;
-    }
 
     c = grain(c, uv, 1, sliders[2]);
 
     c.rgb = ACESFilm(c.rgb);
     c = pow(c, vec3(.4545));
-    if(isPress(buttons[4])){
-      c = fract(beat * 4) > 0.5 ? 1 - c : c;
-    }
+    // if(isPress(buttons[4])){
+    //   c = fract(beat * 4) > 0.5 ? 1 - c : c;
+    // }
 
     c = smoothstep(.01, 1.5, c);
     float lum = dot(c.rgb, vec3(.2126, .7152, .0722));
