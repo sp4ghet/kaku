@@ -23,6 +23,11 @@ stages:
     float: true
     mipmap: true
     wrap: clamp
+  - vs: laser.vert
+    count: 20000
+    mode: LINES
+    thickness: 1
+    target: laser
 
   - cs: waterfall.comp
     target: waterfall

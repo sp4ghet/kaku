@@ -12,6 +12,7 @@ uniform sampler2D waterfall;
 uniform sampler2D gather;
 uniform sampler2D tunnel;
 uniform sampler2D lissajous;
+uniform sampler2D laser;
 
 uniform vec4[32] buttons;
 uniform float[32] sliders;
@@ -65,17 +66,17 @@ void main(){
     }
 
     v = 0;
-    if(sliders[9] > 0.01)
-    {
-        v = texture(waveform, uv).r;
+    if(toggle(buttons[11])){
+        if(sliders[9] > 0.01)
+        {
+            v = texture(waveform, uv).r;
+        }
+        v += texture(osci, uv).r;
     }
-    v += texture(osci, uv).r;
     if(toggle(buttons[3])){
         v *= a;
     }
-    if(toggle(buttons[11])){
-        c += v;
-    }
+    c += v;
 
     if(toggle(buttons[30])){
         c += texture(tunnel, uv).r;
@@ -85,6 +86,14 @@ void main(){
         v = texture(lissajous, uv).b;
     }
     if(toggle(buttons[16])){
+        v *= a;
+    }
+    c += v;
+
+    if(toggle(buttons[25])){
+        v = texture(laser, uv).b;
+    }
+    if(toggle(buttons[17])){
         v *= a;
     }
     c += v;
